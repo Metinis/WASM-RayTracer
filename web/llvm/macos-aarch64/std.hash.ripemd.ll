@@ -1,0 +1,42 @@
+; ModuleID = 'std::hash::ripemd'
+source_filename = "std::hash::ripemd"
+target datalayout = "e-m:o-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-n32:64-S128-Fn32"
+target triple = "aarch64-apple-macosx11.0.0"
+
+@std.hash.ripemd.PERMISSIBLE_SIZES_BITS = weak local_unnamed_addr constant [4 x i64] [i64 128, i64 160, i64 256, i64 320], align 8, !dbg !0
+@std.hash.ripemd.BLOCK_SIZE = weak local_unnamed_addr constant i32 64, align 4, !dbg !7
+@std.hash.ripemd.H = weak local_unnamed_addr constant [10 x i32] [i32 1732584193, i32 -271733879, i32 -1732584194, i32 271733878, i32 -1009589776, i32 1985229328, i32 -19088744, i32 -1985229329, i32 19088743, i32 1009589775], align 4, !dbg !10
+@std.hash.ripemd.K = weak local_unnamed_addr constant [9 x i32] [i32 0, i32 1518500249, i32 1859775393, i32 -1894007588, i32 -1454113458, i32 1352829926, i32 1548603684, i32 1836072691, i32 2053994217], align 4, !dbg !16
+
+!llvm.module.flags = !{!21, !22, !23, !24, !25, !26}
+!llvm.dbg.cu = !{!27}
+
+!0 = !DIGlobalVariableExpression(var: !1, expr: !DIExpression())
+!1 = distinct !DIGlobalVariable(name: "PERMISSIBLE_SIZES_BITS", linkageName: "std.hash.ripemd.PERMISSIBLE_SIZES_BITS", scope: !2, file: !2, line: 6, type: !3, isLocal: false, isDefinition: true, align: 64)
+!2 = !DIFile(filename: "ripemd.c3", directory: "/opt/homebrew/Cellar/c3c/0.7.10/lib/c3/std/hash")
+!3 = !DICompositeType(tag: DW_TAG_array_type, baseType: !4, size: 256, align: 64, elements: !5)
+!4 = !DIBasicType(name: "ulong", size: 64, encoding: DW_ATE_unsigned)
+!5 = !{!6}
+!6 = !DISubrange(count: 4, lowerBound: 0)
+!7 = !DIGlobalVariableExpression(var: !8, expr: !DIExpression())
+!8 = distinct !DIGlobalVariable(name: "BLOCK_SIZE", linkageName: "std.hash.ripemd.BLOCK_SIZE", scope: !2, file: !2, line: 9, type: !9, isLocal: false, isDefinition: true, align: 32)
+!9 = !DIBasicType(name: "int", size: 32, encoding: DW_ATE_signed)
+!10 = !DIGlobalVariableExpression(var: !11, expr: !DIExpression())
+!11 = distinct !DIGlobalVariable(name: "H", linkageName: "std.hash.ripemd.H", scope: !2, file: !2, line: 13, type: !12, isLocal: false, isDefinition: true, align: 32)
+!12 = !DICompositeType(tag: DW_TAG_array_type, baseType: !13, size: 320, align: 32, elements: !14)
+!13 = !DIBasicType(name: "uint", size: 32, encoding: DW_ATE_unsigned)
+!14 = !{!15}
+!15 = !DISubrange(count: 10, lowerBound: 0)
+!16 = !DIGlobalVariableExpression(var: !17, expr: !DIExpression())
+!17 = distinct !DIGlobalVariable(name: "K", linkageName: "std.hash.ripemd.K", scope: !2, file: !2, line: 19, type: !18, isLocal: false, isDefinition: true, align: 32)
+!18 = !DICompositeType(tag: DW_TAG_array_type, baseType: !13, size: 288, align: 32, elements: !19)
+!19 = !{!20}
+!20 = !DISubrange(count: 9, lowerBound: 0)
+!21 = !{i32 2, !"Dwarf Version", i32 4}
+!22 = !{i32 2, !"Debug Info Version", i32 3}
+!23 = !{i32 2, !"wchar_size", i32 4}
+!24 = !{i32 4, !"PIC Level", i32 2}
+!25 = !{i32 1, !"uwtable", i32 1}
+!26 = !{i32 2, !"frame-pointer", i32 1}
+!27 = distinct !DICompileUnit(language: DW_LANG_C11, file: !2, producer: "c3c", isOptimized: false, runtimeVersion: 0, emissionKind: FullDebug, globals: !28, splitDebugInlining: false)
+!28 = !{!0, !7, !10, !16}
