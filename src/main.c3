@@ -4,6 +4,5 @@ import test;
 
 fn int main(String[] args)
 {
-    test::test(2, 3);
 	  return 0;
 }
