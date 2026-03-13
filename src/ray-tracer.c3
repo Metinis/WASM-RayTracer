@@ -3,26 +3,18 @@ import std::io;
 import std::math;
 import libc;
 
-struct Color {
-  float r;
-  float g;
-  float b;
-}
-
-struct Vec3 {
-  float x;
-  float y;
-  float z;
-}
-
-struct Vec2 {
-  float x;
-  float y;
-}
+typedef Color = inline float[<3>];
+typedef Vec3 = inline float[<3>];
+typedef Vec2 = inline float[<2>];
 
 struct Ray {
   Vec3 origin;
   Vec3 direction;
+}
+
+struct Sphere {
+  Vec3 center;
+  float radius;
 }
 
 const SCR_WIDTH = 800;
@@ -37,9 +29,6 @@ fn void clear() @extern ("clear") @wasm {
       pixels[i] = grey;
   }
 }
-
-const RADIUS = 100;
-Vec3 circlePos = {-0.5, 0.0, 0.0}; //clip space 
 
 fn Vec2 clipToScr(Vec2 pos) {
   float x = ((pos.x + 1)) * SCR_WIDTH / 2;
@@ -61,7 +50,26 @@ fn Vec3 unitVector(Vec3 vec){
   return {vec.x / div, vec.y/div, vec.z/div};
 }
 
+fn bool hitSphere(Sphere sphere, Ray ray) {
+
+  Vec3 cq = sphere.center - ray.origin;
+  float a = Vec3.dot(ray.direction, ray.direction);
+  float b = -2 * ray.direction.dot(cq);
+  float c = cq.dot(cq) - (sphere.radius * sphere.radius);
+
+  return (b*b - 4*a*c) >= 0;
+}
+
+Sphere sphere = {
+  {0, 0, 0},
+  0.5
+};
 fn Color rayColor(Ray ray) {
+
+  if(hitSphere(sphere, ray)) {
+    return {0.0, 1.0, 0.0};
+  }
+
   Vec3 unitDir = unitVector(ray.direction);
   float a = 0.5*(unitDir.y + 1.0);
   Color ret = {
@@ -72,6 +80,11 @@ fn Color rayColor(Ray ray) {
   return ret;
 }
 
+fn Vec2 scrPxViewport(Vec2 pos) {
+  float x = ((pos.x / (float)SCR_WIDTH) * 2.0f) - 1.0f;
+  float y = (1.0f - (pos.y / (float)SCR_HEIGHT) * 2.0f);
+  return {x, y};
+}
 Vec3 cameraCenter = {0.0, 0.0, 1.0};
 
 fn void draw() @extern ("draw") @wasm {
@@ -81,7 +94,8 @@ fn void draw() @extern ("draw") @wasm {
         int x = i % SCR_WIDTH;
         int y = i / SCR_WIDTH;
 
-        Vec3 rayDir = {x - cameraCenter.x, y - cameraCenter.y, 0 - cameraCenter.z};
+        Vec2 vpPos = scrPxViewport({x, y}); 
+        Vec3 rayDir = {vpPos.x, vpPos.y, -1.0f};
         Ray ray = {cameraCenter, rayDir};
 
         Color color = rayColor(ray);
