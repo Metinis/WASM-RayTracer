@@ -18,7 +18,7 @@ struct Sphere {
 }
 
 const SCR_WIDTH = 800;
-const SCR_HEIGHT = 600;
+const SCR_HEIGHT = 800;
 Color[SCR_HEIGHT * SCR_WIDTH] pixels;
 
 fn void clear() @extern ("clear") @wasm {
@@ -50,24 +50,32 @@ fn Vec3 unitVector(Vec3 vec){
   return {vec.x / div, vec.y/div, vec.z/div};
 }
 
-fn bool hitSphere(Sphere sphere, Ray ray) {
+fn float hitSphere(Sphere sphere, Ray ray) {
 
   Vec3 cq = sphere.center - ray.origin;
   float a = Vec3.dot(ray.direction, ray.direction);
   float b = -2 * ray.direction.dot(cq);
   float c = cq.dot(cq) - (sphere.radius * sphere.radius);
+  float dis = (b*b - 4*a*c);
 
-  return (b*b - 4*a*c) >= 0;
+  if(dis < 0){
+    return -1.0f;
+  } else {
+    return (-b-math::sqrt(dis)) / (2.0f*a);
+  }
 }
 
 Sphere sphere = {
-  {0, 0, 0},
-  0.5
+  {0, 0, -1.0f},
+  1 
 };
 fn Color rayColor(Ray ray) {
 
-  if(hitSphere(sphere, ray)) {
-    return {0.0, 1.0, 0.0};
+  float t = hitSphere(sphere, ray);
+  if(t > 0.0f) {
+    Vec3 hitPos = ray.origin + (Vec3)(t*ray.direction);
+    Vec3 n = unitVector(hitPos - (Vec3)({0, 0, -1}));
+    return 0.5*(Color){n.x+1, n.y+1, n.z+1};
   }
 
   Vec3 unitDir = unitVector(ray.direction);
